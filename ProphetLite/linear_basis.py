@@ -47,14 +47,12 @@ def get_basis(y, n_changepoints, decay):
                                   end_point,
                                   n - len_splits + 1)
         changepoints[:, i] = np.append(left_basis, right_basis[1:])
-    # changepoints[:, i+1] = np.ones(n)
     slopes = changepoints[-1] - changepoints[-2]
     diff = changepoints[-1, :]
     return changepoints, slopes, diff
 
 @njit
 def get_future_basis(forecast_horizon, slopes, diff, n_changepoints, training_length):
-    # slopes = basis[-1] - basis[-2]
     future_basis = np.arange(0, forecast_horizon + 1)
     future_basis += training_length
     future_basis = future_basis.reshape(-1, 1)
@@ -64,18 +62,6 @@ def get_future_basis(forecast_horizon, slopes, diff, n_changepoints, training_le
     future_basis = future_basis + (diff - future_basis[0, :])#diff
     return future_basis[1:, :]
 
-# @njit
-# def get_future_basis(basis_functions, forecast_horizon):
-#         n_components = np.shape(basis)[1]
-#         slopes = basis[-1] - basis[-2]
-#         future_basis = np.arange(0, 24 + 1)
-#         future_basis += len(basis)
-#         future_basis = future_basis.reshape(-1, 1)
-#         for i in np.arange(1, n_components):
-#             future_basis = np.append(future_basis, future_basis[:, :1], axis=1)
-#         future_basis = future_basis * slopes
-#         future_basis = future_basis + (basis_functions[-1, :] - future_basis[0, :])
-#         return future_basis[1:, :]
 
 #%%
 if __name__ == '__main__':
@@ -86,19 +72,7 @@ if __name__ == '__main__':
     noise = np.random.normal(0, 1, 100)
     y = true + noise + seasonality
     plt.plot(y)
-    basis, slopes, diff = get_basis(y, 10, decay=.99)
+    basis, slopes, diff = get_basis(y, 10, decay=-1)
     future_basis = get_future_basis(24, slopes, diff, 10, len(y))
     full = np.append(basis, future_basis, axis=0)
     plt.plot(full + y[0])
-    # slopes = np.gradient(basis)[0][-1, :]
-    # slopes2 = basis[-1] - basis[-2]
-
-
-    # n_components = np.shape(basis)[1]
-    # slopes = basis[-1] - basis[-2]
-    # future_basis = np.arange(0, 24 + 1)
-    # future_basis += len(basis)
-    # future_basis = future_basis.reshape(-1, 1)
-    # for i in np.arange(1, n_components):
-    #     future_basis = np.append(future_basis, future_basis[:, :1], axis=1)
-    # future_basis = np.tile(future_basis,n_components).reshape(24 + 1, -1)

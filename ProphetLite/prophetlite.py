@@ -120,11 +120,11 @@ class ProphetLite:
             plt.plot(self.fitted['yhat'])
         plt.show()
 
-    def plot_components(self):
+    def plot_components(self, figsize=(6,4)):
         # plt.plot(self.y)
         if self.predict_step:
             if self.seasonal_period is not None:
-                fig, ax = plt.subplots(3, figsize=(6,4))
+                fig, ax = plt.subplots(3, figsize=figsize)
                 ax[0].set_title('Trend')
                 ax[1].set_title('Seasonality')
                 ax[2].set_title('Residuals')
@@ -134,13 +134,15 @@ class ProphetLite:
                                      self.forecast['trend']))
                 ax[2].plot(self.y - self.fitted['yhat'])
             else:
-                fig, ax = plt.subplots(2, figsize=(6,4))
+                fig, ax = plt.subplots(2, figsize=figsize)
+                ax[0].set_title('Trend')
+                ax[1].set_title('Residuals')
                 ax[0].plot(np.append(self.fitted['trend'],
                                      self.forecast['trend']))
                 ax[1].plot(self.y - self.fitted['yhat'])
         else:
             if self.seasonal_period is not None:
-                fig, ax = plt.subplots(3, figsize=(6,4))
+                fig, ax = plt.subplots(3, figsize=figsize)
                 ax[0].set_title('Trend')
                 ax[1].set_title('Seasonality')
                 ax[2].set_title('Residuals')
@@ -148,40 +150,10 @@ class ProphetLite:
                 ax[0].plot(self.fitted['trend'])
                 ax[2].plot(self.y - self.fitted['yhat'])
             else:
-                fig, ax = plt.subplots(2, figsize=(6,4))
+                fig, ax = plt.subplots(2, figsize=figsize)
+                ax[0].set_title('Trend')
+                ax[1].set_title('Residuals')
                 ax[0].plot(self.fitted['trend'])
                 ax[1].plot(self.y - self.fitted['yhat'])
         plt.tight_layout()
         plt.show()
-
-#%%
-if __name__ == '__main__':
-    import pandas as pd
-    from prophet import Prophet
-
-    df = pd.read_csv('https://raw.githubusercontent.com/facebook/prophet/main/examples/example_wp_log_peyton_manning.csv')
-    m = Prophet(weekly_seasonality=False)
-    m.fit(df, )
-    future = m.make_future_dataframe(periods=365)
-    forecast = m.predict(future)
-    m.plot(forecast)
-    m.plot_components(forecast)
-    plt.show()
-
-    y = df['y'].values
-
-    pl = ProphetLite()
-    fitted = pl.fit(y, None)
-    predicted = pl.predict(365)
-    print(pl.trend_penalty)
-
-    pl.plot()
-    pl.plot_components()
-
-    plt.plot(np.append(fitted['yhat'], predicted['yhat']), alpha=.3)
-    plt.plot(forecast['yhat'], alpha=.3)
-    plt.show()
-
-    plt.plot(np.append(fitted['trend'], predicted['trend']))
-    plt.plot(forecast['trend'])
-    plt.show()
