@@ -26,7 +26,7 @@ def lasso_nb(X, y, alpha, maxiter=200):
                 R += X[:, ii] * beta_ii
             tmp = np.dot(X[:, ii], R)
             # Soft thresholding
-            beta[ii] = fsign(tmp) * max(abs(tmp) - alpha, 0) / norm_cols_X[ii]
+            beta[ii] = fsign(tmp) * max(abs(tmp) - alpha, 0) / (.00001 + norm_cols_X[ii])
 
             if beta[ii] != 0.:
                 R -= X[:, ii] * beta[ii]

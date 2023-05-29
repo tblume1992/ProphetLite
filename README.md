@@ -24,17 +24,29 @@ plt.show()
 ```
  Now to build the class and pass the seasonality
 ```
+from ProphetLite.prophetlite import ProphetLite 
+
+
 pl = ProphetLite()
 fitted = pl.fit(y, [365.25]) #To pass multiple seasonalities just add more nu
 predicted = pl.predict(365)
-
+```
+ Some Plotting helper methods
+```
     pl.plot()
+```
+```
     pl.plot_components()
-
+```
+## Comparison Plots
+```
     plt.plot(np.append(fitted['yhat'], predicted['yhat']), alpha=.3)
     plt.plot(forecast['yhat'], alpha=.3)
     plt.show()
-
+```
+The Trend Components:
+```
     plt.plot(np.append(fitted['trend'], predicted['trend']))
     plt.plot(forecast['trend'])
     plt.show()
+```

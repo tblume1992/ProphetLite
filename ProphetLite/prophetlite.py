@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
 import numpy as np
-from numba import njit, jit
 import matplotlib.pyplot as plt
 from ProphetLite.model import lasso_nb
 from ProphetLite.fourier import get_fourier_series, get_future_fourier_series
 from ProphetLite.linear_basis import get_basis, get_future_basis
+import warnings
+warnings.filterwarnings('ignore')
 
 
 class ProphetLite:
@@ -35,7 +36,7 @@ class ProphetLite:
         self.fourier_order = fourier_order
         n = len(y)
         if n < n_changepoints:
-            n_changepoints = n - 1
+            n_changepoints = int(.8 * n - 1)
         linear_basis, self.slopes, self.diff = get_basis(y=y, n_changepoints=n_changepoints, decay=decay)
         if seasonal_period is not None:
             if not isinstance(seasonal_period, list):

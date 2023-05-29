@@ -35,6 +35,8 @@ def get_basis(y, n_changepoints, decay):
             end_point = final_point
         else:
             if decay == -1:
+                if not mean_y:
+                    mean_y += 0.00001
                 dd = moving_point**2 / (mean_y**2)
                 if dd > .99:
                     dd = .99
