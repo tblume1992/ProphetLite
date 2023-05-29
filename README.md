@@ -1,6 +1,7 @@
-# ProphetLite
+# ProphetLite 0.0.2
  Like Prophet but in numba and all fit with LASSO
 
+ View example notebook here: https://github.com/tblume1992/ProphetLite/blob/main/Examples/ProphetLite_Example.ipynb
 ## A basic comparison vs Prophet:
 ```
 import pandas as pd
